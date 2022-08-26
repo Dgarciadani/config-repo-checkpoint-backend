@@ -1,0 +1,5 @@
+server:
+  port: 8000
+
+
+message: hello from catalog-service, cofing server
