@@ -1,3 +1,48 @@
 server:
   port: 8000
+  servlet:
+    context-path: /catalog
+
+spring:
+ data:
+    mongodb:
+      port: 27018
+      database: catalogFP
+
+
+queue:
+  movie:
+    name: "movie-queue"
+  series:
+    name: "series-queue"
+
+# ----------------------------------------------------------------
+resilience4j:
+  bulkhead:
+    instances:
+      movie-service:
+        maxConcurrentCalls: 90
+        maxWaitDuration: 100ms
+  retry:
+    instances:
+      movie-service:
+        maxAttempts: 3
+        waitDuration: 500ms
+        retry-exceptions:
+          - feign.FeignException.InternalServerError
+          - feign.FeignException.GatewayTimeout
+          - feign.FeignException.ServiceUnavailable
+  circuitbreaker:
+    instances:
+      movie-service:
+        allow-health-indicator-to-fail: false
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 100ms
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        automatic-transition-from-open-to-half-open-enabled: true
+
 

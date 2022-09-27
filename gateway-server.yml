@@ -9,6 +9,10 @@ spring:
                 uri: lb://movie-service
                 predicates:
                   - Path=/movies/**
+              - id: seriesRoute
+                uri: lb://series-service
+                predicates:
+                  - Path=/series/**
               - id: catalogRoute
                 uri: lb://catalog-service
                 predicates:
@@ -18,3 +22,4 @@ spring:
                 predicates:
                   - Method=GET
                   - Path=/get
+                  
